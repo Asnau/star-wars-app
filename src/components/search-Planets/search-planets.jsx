@@ -9,13 +9,10 @@ import {
     Navbar
 } from "react-bootstrap";
 
-export default function SearchPlanets(props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+//import Searchbar from './searchbar';
+import Searchbar1 from './searchbar1';
 
-  function validateForm() {
-    return email.length > 0 && password.length > 0;
-  }
+export default function SearchPlanets(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -28,11 +25,8 @@ export default function SearchPlanets(props) {
                 <img alt="" src="" width="30" height="30" className=" d-inline-block align-top"/>
                 {'STAR WARS search far far away'} 
             </Navbar.Brand>
-            <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-light" onClick={handleSubmit}>Search</Button>
-            </Form>
         </Navbar>
+        <Searchbar1/>
     </React.Fragment>
   );
 }

@@ -1,4 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import {
+  Route,
+  Router,
+  Link,
+  NavRef,
+  Redirect,
+} from 'react-router-dom';
 import { 
     Button, 
     FormGroup, 
@@ -7,18 +14,62 @@ import {
     Nav,
     Navbar
 } from "react-bootstrap";
+import SearchPlanets from '../search-Planets/search-planets';
 import "./login.css";
 
 export default function Login(props) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loggedin, setLoggedin] = useState(false);
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+    return username.length > 0 && password.length > 0;
   }
+
+  /* useEffect(() => {
+     fetch(
+        'https://swapi.co/api/people',
+      ).then(data => data.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
+     }); */
 
   function handleSubmit(event) {
     event.preventDefault();
+    // alert(`Username: ${username}, Password: ${password}`)
+    const URL = "https://swapi.co/api/people";
+    const otherParam= {
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            "Content-Type": "application/json"
+        },
+        method: 'GET'
+    }
+    fetch(URL, otherParam)
+        .then(data => data.json())
+        .then(data => {
+          data.results.map((res) => {
+            console.log(res);
+            for(let key in res) {
+              let new_res = res[key];
+              console.log(new_res);
+              // if(`${username}`== new_res ) {
+                if(`${password}`== new_res ) {
+                  alert("Successful Login");
+                  setLoggedin(true);
+                  return( 
+                    <Router>
+                    <Route exact path="/">
+                      {loggedin ? <Redirect to="/searchPlanet" /> : <SearchPlanets />}
+                    </Route>
+                    </Router>
+                  )
+                // }
+              }
+            }
+          })
+        })
+        .catch(err => console.log(err));
   }
 
   return (
@@ -31,13 +82,13 @@ export default function Login(props) {
     </Navbar>
     <div className="Login">
       <form onSubmit={handleSubmit}>
-        <FormGroup controlId="email" bsSize="large">
-          <FormLabel>Email</FormLabel>
+        <FormGroup controlId="text" bsSize="large">
+          <FormLabel>Username</FormLabel>
           <FormControl
             autoFocus
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
           />
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
